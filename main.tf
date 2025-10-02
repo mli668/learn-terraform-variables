@@ -1,19 +1,16 @@
 terraform {
-/*
   cloud {
     organization = "policy-as-code-training"
     workspaces {
-      name = "policy-dev-{your-initials}"
+      name = "policy-dev-amyli"
+      project = "policy-as-code"
     }
   }
-*/
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.28.0"
     }
   }
-  required_version = ">= 0.14.0"
 }
 
 
@@ -122,6 +119,8 @@ module "ec2_instances" {
 
   instance_count = var.instance_count
   instance_type  = var.instance_type
+ 
+
   subnet_ids         = module.vpc.private_subnets[*]
   security_group_ids = [module.app_security_group.this_security_group_id]
 
