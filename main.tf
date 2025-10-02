@@ -69,7 +69,7 @@ module "lb_security_group" {
 
   tags = {
     project     = "project-alpha",
-    environment = "dev"
+    environment = "development"
   }
 }
 
