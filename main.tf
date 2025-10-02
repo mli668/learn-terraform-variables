@@ -126,6 +126,6 @@ module "ec2_instances" {
 
   tags = {
     project     = "project-alpha",
-    environment = "dev"
+    environment = "development"
   }
 }
