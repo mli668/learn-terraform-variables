@@ -1,5 +1,4 @@
 terraform {
-
    cloud {
     organization = "policy-as-code-training"
     workspaces {
@@ -11,10 +10,8 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.28.0"
     }
   }
-  required_version = ">= 0.14.0"
 }
 
 
@@ -69,12 +66,27 @@ module "lb_security_group" {
   description = "Security group for load balancer with HTTP ports open within VPC"
   vpc_id      = module.vpc.vpc_id
 
-  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_cidr_blocks = ["0.0.0.0/16"]
+  #ingress_rules       = ["ssh-tcp"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "SSH open to the world"
+      cidr_blocks = "0.0.0.0/16"
+    }
+  ]
 
   tags = {
     project     = "project-alpha",
-    environment = "dev"
+    environment = "development"
   }
+}
+resource "aws_ebs_volume" "unencrypted" {
+  availability_zone = "us-west-1a"
+  size              = 8
+  encrypted         = true # Intentional violation: unencrypted EBS volume
 }
 
 resource "random_string" "lb_id" {
@@ -123,11 +135,13 @@ module "ec2_instances" {
 
   instance_count = var.instance_count
   instance_type  = var.instance_type
+ 
+
   subnet_ids         = module.vpc.private_subnets[*]
   security_group_ids = [module.app_security_group.this_security_group_id]
 
   tags = {
     project     = "project-alpha",
-    environment = "dev"
+    environment = "development"
   }
 }
