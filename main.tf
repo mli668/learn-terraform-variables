@@ -1,12 +1,13 @@
 terraform {
-/*
-  cloud {
+
+   cloud {
     organization = "policy-as-code-training"
     workspaces {
-      name = "policy-dev-{your-initials}"
+      name = "policy-dev-aml"
+      project = "policy-as-code"
     }
   }
-*/
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
